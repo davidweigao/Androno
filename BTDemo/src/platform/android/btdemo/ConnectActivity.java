@@ -7,14 +7,15 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ConnectActivity extends Activity {
@@ -37,7 +38,7 @@ public class ConnectActivity extends Activity {
 	private Button btnConnect;
 	
 	private BluetoothAdapter mBluetoothAdapter = null;
-	private BluetoothControlService mControlService = null;
+	private BluetoothControlService mBluetoothControlService = null;
 	private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>();
 	private BTDeviceAdapter pairedDevicesListViewAdapter;
 
@@ -48,10 +49,18 @@ public class ConnectActivity extends Activity {
 		
 		// Set up the window layout
 		setContentView(R.layout.activity_connect);
-		
+		mBluetoothControlService = ((AndronoApp)getApplicationContext()).mBluetoothControlService;
 		// Set up UI Views
 		pairedDevicesListView = (ListView)findViewById(R.id.listViewPairedDevices);
 		btnConnect = (Button)findViewById(R.id.btnConnect);
+		
+		btnConnect.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				setupConnection();				
+			}
+		});
 		
 		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -76,7 +85,7 @@ public class ConnectActivity extends Activity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         // Otherwise, setup the chat session
         } else {
-            if (mControlService == null) setupConnection();
+            //if (mControlService == null) setupConnection();
         }
     }
 	
@@ -96,6 +105,31 @@ public class ConnectActivity extends Activity {
     		pairedDevices.addAll(pairedDevicesSet);
     		pairedDevicesListViewAdapter = new BTDeviceAdapter(this,R.layout.listview_pairedbtdevice,pairedDevices);
     		pairedDevicesListView.setAdapter(pairedDevicesListViewAdapter);
+    		pairedDevicesListView.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					Log.e(TAG, "selected" + arg2);
+					
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+    		pairedDevicesListView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					mBluetoothControlService.connectToDevice(pairedDevices.get(arg2));
+					Intent k = new Intent(ConnectActivity.this,ControlActivity.class);
+			        startActivity(k);
+				}
+			});
     	}
 	}
 
@@ -104,7 +138,11 @@ public class ConnectActivity extends Activity {
 
         // Initialize the BluetoothControlService to perform bluetooth connections
         //mControlService = new BluetoothChatService(this, mHandler);
-
+        BluetoothDevice bDevice = (BluetoothDevice)pairedDevicesListView.getSelectedItem();
+        if(bDevice != null)
+        	mBluetoothControlService.connectToDevice(bDevice);
+        else
+        	Log.e(TAG, "Null selected");
     }
     
     @Override
