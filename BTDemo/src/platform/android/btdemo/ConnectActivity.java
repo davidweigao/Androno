@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,6 +52,7 @@ public class ConnectActivity extends Activity {
 		// Set up the window layout
 		setContentView(R.layout.activity_connect);
 		mBluetoothControlService = ((AndronoApp)getApplicationContext()).mBluetoothControlService;
+		mBluetoothControlService.setHandler(mHandler);
 		// Set up UI Views
 		pairedDevicesListView = (ListView)findViewById(R.id.listViewPairedDevices);
 		btnConnect = (Button)findViewById(R.id.btnConnect);
@@ -125,7 +128,8 @@ public class ConnectActivity extends Activity {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					mBluetoothControlService.connectToDevice(pairedDevices.get(arg2));
+					//mBluetoothControlService.connectToDevice(pairedDevices.get(arg2));
+					mBluetoothControlService.connect(pairedDevices.get(arg2));
 					Intent k = new Intent(ConnectActivity.this,ControlActivity.class);
 			        startActivity(k);
 				}
@@ -164,5 +168,54 @@ public class ConnectActivity extends Activity {
         //if (mControlService != null) mControlService.stop();
         if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
+    
+    // The Handler that gets information back from the BluetoothChatService
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case AndronoApp.MESSAGE_STATE_CHANGE:
+                if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                switch (msg.arg1) {
+                case BluetoothControlService.STATE_CONNECTED:
+                    //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                    //mConversationArrayAdapter.clear();
+                    break;
+                case BluetoothControlService.STATE_CONNECTING:
+                    //setStatus(R.string.title_connecting);
+                    break;
+                case BluetoothControlService.STATE_LISTEN:
+                case BluetoothControlService.STATE_NONE:
+                    //setStatus(R.string.title_not_connected);
+                    break;
+                }
+                break;
+            case AndronoApp.MESSAGE_WRITE:
+                byte[] writeBuf = (byte[]) msg.obj;
+                // construct a string from the buffer
+                String writeMessage = new String(writeBuf);
+                //mConversationArrayAdapter.add("Me:  " + writeMessage);
+                break;
+            case AndronoApp.MESSAGE_READ:
+                byte[] readBuf = (byte[]) msg.obj;
+                // construct a string from the valid bytes in the buffer
+                String readMessage = new String(readBuf, 0, msg.arg1);
+                //mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                Toast.makeText(getApplicationContext(), readMessage,
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case AndronoApp.MESSAGE_DEVICE_NAME:
+                // save the connected device's name
+                //mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                Toast.makeText(getApplicationContext(), "Connected to "
+                               + "Arduino", Toast.LENGTH_SHORT).show();
+                break;
+            case AndronoApp.MESSAGE_TOAST:
+                Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
+                               Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
+    };
 
 }

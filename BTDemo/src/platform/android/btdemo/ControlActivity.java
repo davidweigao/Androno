@@ -26,7 +26,8 @@ public class ControlActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				mBluetoothControlService.sendString(txtSend.getText().toString());
+				//mBluetoothControlService.sendString(txtSend.getText().toString());
+				mBluetoothControlService.write(txtSend.getText().toString().getBytes());
 			}			
 			
 		});
