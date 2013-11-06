@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="3"
+    android:rowCount="8" >
+
+    <TextView
+        style="@style/PinLabelStyle"
+        android:id="@+id/textView1"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="0"
+        android:text="PinD1" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="120dp"
+        android:layout_column="1"
+        android:layout_columnSpan="1"
+        android:layout_gravity="fill"
+        android:layout_row="0"
+        android:layout_marginLeft="20dp" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_column="2"
+        android:layout_gravity="right|center_vertical"
+        android:layout_row="0"/>
+    
+    
+    
+        <TextView
+        style="@style/PinLabelStyle"
+        android:id="@+id/textView1"
+        android:layout_column="0"
+        android:layout_gravity="left|top"
+        android:layout_row="1"
+        android:text="PinD1" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="120dp"
+        android:layout_column="1"
+        android:layout_columnSpan="1"
+        android:layout_gravity="fill"
+        android:layout_row="1"
+        android:layout_marginLeft="20dp" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_column="2"
+        android:layout_gravity="right|center_vertical"
+        android:layout_row="1"/>
+
+</GridLayout>

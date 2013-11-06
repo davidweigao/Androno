@@ -19,8 +19,6 @@ public class ControlActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_control);
 		
-		btnSend = (Button)findViewById(R.id.btnSend);
-		txtSend = (EditText)findViewById(R.id.txtSend);
 		mBluetoothControlService = AndronoApp.mBluetoothControlService;
 		btnSend.setOnClickListener(new OnClickListener() {
 			

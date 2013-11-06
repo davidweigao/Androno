@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="2"
+    android:rowCount="4"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:useDefaultMargins="false" >
+
+    <TextView
+        style="@style/PinLabelStyle"
+        android:layout_column="0"
+        android:layout_row="0"
+        android:text="PinA1"/>
+    
+    <TextView
+        style="@style/AnalogPinValueTextStyle"
+        android:id="@+id/pinA1"
+        android:layout_column="1"
+        android:layout_row="0"
+        android:text="TextView" />
+    
+    <TextView
+        style="@style/PinLabelStyle"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:text="PinA2"/>
+    
+    <TextView
+        style="@style/AnalogPinValueTextStyle"
+        android:id="@+id/pinA2"
+        android:layout_column="1"
+        android:layout_row="1"
+        android:text="TextView" />
+    
+    <TextView
+        style="@style/PinLabelStyle"
+        android:layout_column="0"
+        android:layout_row="2"
+        android:text="PinA3"/>
+    
+    <TextView
+        style="@style/AnalogPinValueTextStyle"
+        android:id="@+id/pinA3"
+        android:layout_column="1"
+        android:layout_row="2"
+        android:text="TextView" />
+    
+    <TextView
+        style="@style/PinLabelStyle"
+        android:layout_column="0"
+        android:layout_row="3"
+        android:text="PinA4"/>
+    
+    <TextView
+        style="@style/AnalogPinValueTextStyle"
+        android:id="@+id/pinA4"
+        android:layout_column="1"
+        android:layout_row="3"
+        android:text="TextView" />
+
+</GridLayout>
